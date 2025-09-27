@@ -1,24 +1,36 @@
-<?php 
- 
-namespace App\Models; 
- 
-use Illuminate\Database\Eloquent\Factories\HasFactory; 
-use Illuminate\Database\Eloquent\Model; 
- 
-class Job extends Model 
-{ 
-    use HasFactory; 
- 
-    protected $table = 'job_listings'; 
- 
-    public function employer() 
-    { 
-        return $this->belongsTo(\App\Models\Employer::class); 
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Job extends Model
+{
+    use HasFactory;
+
+    // Explicitly set the table
+    protected $table = 'job_listings';
+
+    // ✅ Allow these fields for mass assignment
+    protected $fillable = [
+        'title',
+        'salary',
+        'employer_id',
+    ];
+
+    public function employer()
+    {
+        return $this->belongsTo(\App\Models\Employer::class);
     }
- 
-    public function tags() 
-    { 
-        // Corrected relationship with foreignPivotKey and relatedPivotKey
-        return $this->belongsToMany(\App\Models\Tag::class, 'job_listing_tag', 'job_listing_id', 'tag_id');
+
+    public function tags()
+    {
+        return $this->belongsToMany(
+            \App\Models\Tag::class,
+            'job_listing_tag',
+            'job_listing_id',
+            'tag_id'
+        );
     }
 }
